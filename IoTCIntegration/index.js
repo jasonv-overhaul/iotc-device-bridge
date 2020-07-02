@@ -17,6 +17,10 @@ const parameters = {
 let kvToken;
 
 module.exports = async function (context, req) {
+  context.log.verbose(msiEndpoint);
+  context.log.verbose(msiSecret);
+  context.log.verbose("index::body is....");
+  context.log.verbose(JSON.stringify(req.body));
   try {
     await handleMessage(
       { ...parameters, log: context.log, getSecret: getKeyVaultSecret },

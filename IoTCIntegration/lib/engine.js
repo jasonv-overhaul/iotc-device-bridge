@@ -26,17 +26,22 @@ const deviceCache = {};
  * @param {{ [field: string]: number }} measurements
  */
 module.exports = async function (context, body) {
-  context.log.verbose("Received Data:");
-  context.log.verbose(JSON.stringify(body));
+  context.log.verbose("handleMessge:...");
+  // context.log.verbose(body);
+  // context.log.verbose(JSON.stringify(body));
 
   const shipmentDevices = body["data"]["shipment_devices"];
   for (const deviceEnvelope of shipmentDevices) {
+    context.log.verbose("handleMessage::shipmentDevices");
+    context.log.verbose(shipmentDevices);
     const device = deviceEnvelope.imei;
+    context.log.verbose("handleMessage::imei");
+    context.log.verbose(device);
     const client = Device.Client.fromConnectionString(
       await getDeviceConnectionString(context, device),
       DeviceTransport.Http
     );
-
+    context.log("handleMessage::got client");
     try {
       const message = new Device.Message(JSON.stringify(body));
       message.contentEncoding = "utf-8";
