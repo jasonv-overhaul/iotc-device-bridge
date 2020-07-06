@@ -1,12 +1,7 @@
-/*!
- * Copyright (c) Microsoft Corporation. All rights reserved.
- * Licensed under the MIT License.
- */
-
 const crypto = require("crypto");
-const request = require("request-promise-native");
 const Device = require("azure-iot-device");
 const DeviceTransport = require("azure-iot-device-http");
+const request = require("request-promise-native");
 
 const StatusError = require("../error").StatusError;
 
@@ -19,123 +14,83 @@ const minDeviceRegistrationTimeout = 60 * 1000; // 1 minute
 
 const deviceCache = {};
 
-/**
- * Forwards external telemetry messages for IoT Central devices.
- * @param {{ idScope: string, primaryKeyUrl: string, log: Function, getSecret: (context: Object, secretUrl: string) => string }} context
- * @param {{ deviceId: string }} device
- * @param {{ [field: string]: number }} measurements
- */
 module.exports = async function (context, body) {
-  context.log.verbose("handleMessge:...");
-  // context.log.verbose(body);
-  // context.log.verbose(JSON.stringify(body));
-
   const shipmentDevices = body["data"]["shipment_devices"];
   for (const deviceEnvelope of shipmentDevices) {
-    context.log.verbose("handleMessage::shipmentDevices");
-    context.log.verbose(shipmentDevices);
     const device = deviceEnvelope.imei;
-    context.log.verbose("handleMessage::imei");
-    context.log.verbose(device);
     const client = Device.Client.fromConnectionString(
       await getDeviceConnectionString(context, device),
       DeviceTransport.Http
     );
-    context.log("handleMessage::got client");
     try {
       const message = new Device.Message(JSON.stringify(body));
       message.contentEncoding = "utf-8";
       message.contentType = "application/json";
 
-      // if (timestamp) {
-      //     message.properties.add('iothub-creation-time-utc', timestamp);
-      // }
-
       await client.open();
-      context.log("[HTTP] Sending telemetry for device", device.deviceId);
+      context.log("[HTTP] Sending telemetry for device", device);
       await client.sendEvent(message);
       await client.close();
     } catch (e) {
       // If the device was deleted, we remove its cached connection string
-      if (e.name === "DeviceNotFoundError" && deviceCache[device.deviceId]) {
-        delete deviceCache[device.deviceId].connectionString;
+      if (e.name === "DeviceNotFoundError" && deviceCache[device]) {
+        delete deviceCache[device].connectionString;
       }
 
       throw new Error(
-        `Unable to send telemetry for device ${device.deviceId}: ${e.message}`
+        `Unable to send telemetry for device ${device}: ${e.message}`
       );
     }
   }
 };
 
-/**
- * @returns true if measurements object is valid, i.e., a map of field names to numbers or strings.
- */
-function validateMeasurements(measurements) {
-  if (!measurements || typeof measurements !== "object") {
-    return false;
-  }
-
-  return true;
-}
-
 async function getDeviceConnectionString(context, device) {
-  const deviceId = device.deviceId;
-
-  if (deviceCache[deviceId] && deviceCache[deviceId].connectionString) {
-    return deviceCache[deviceId].connectionString;
+  if (deviceCache[device] && deviceCache[device].connectionString) {
+    return deviceCache[device].connectionString;
   }
+  const deviceHub = await getDeviceHub(context, device);
+  const deviceKey = await getDeviceKey(context, device);
+  const connStr = `HostName=${deviceHub};DeviceId=${device};SharedAccessKey=${deviceKey}`;
+  deviceCache[device].connectionString = connStr;
 
-  const connStr = `HostName=${await getDeviceHub(
-    context,
-    device
-  )};DeviceId=${deviceId};SharedAccessKey=${await getDeviceKey(
-    context,
-    deviceId
-  )}`;
-  deviceCache[deviceId].connectionString = connStr;
   return connStr;
 }
 
-/**
- * Registers this device with DPS, returning the IoT Hub assigned to it.
- */
 async function getDeviceHub(context, device) {
-  const deviceId = device.deviceId;
   const now = Date.now();
 
   // A 1 minute backoff is enforced for registration attempts, to prevent unauthorized devices
   // from trying to re-register too often.
   if (
-    deviceCache[deviceId] &&
-    deviceCache[deviceId].lasRegisterAttempt &&
-    now - deviceCache[deviceId].lasRegisterAttempt <
-      minDeviceRegistrationTimeout
+    false && // TODO REMOVE ME AFTER TESTING
+    deviceCache[device] &&
+    deviceCache[device].lasRegisterAttempt &&
+    now - deviceCache[device].lasRegisterAttempt < minDeviceRegistrationTimeout
   ) {
     const backoff = Math.floor(
       (minDeviceRegistrationTimeout -
-        (now - deviceCache[deviceId].lasRegisterAttempt)) /
-        1000
+        (now - deviceCache[device].lasRegisterAttempt)) /
+        10000 // TODO: Change this to 1000
     );
     throw new StatusError(
-      `Unable to register device ${deviceId}. Minimum registration timeout not yet exceeded. Please try again in ${backoff} seconds`,
+      `Unable to register device ${device}. Minimum registration timeout not yet exceeded. Please try again in ${backoff} seconds`,
       403
     );
   }
 
-  deviceCache[deviceId] = {
-    ...deviceCache[deviceId],
+  deviceCache[device] = {
+    ...deviceCache[device],
     lasRegisterAttempt: Date.now(),
   };
 
-  const sasToken = await getRegistrationSasToken(context, deviceId);
+  const sasToken = await getRegistrationSasToken(context, device);
 
   const registrationOptions = {
-    url: `https://${registrationHost}/${context.idScope}/registrations/${deviceId}/register?api-version=${registrationApiVersion}`,
+    url: `https://${registrationHost}/${context.idScope}/registrations/${device}/register?api-version=${registrationApiVersion}`,
     method: "PUT",
     json: true,
     headers: { Authorization: sasToken },
-    body: { registrationId: deviceId },
+    body: { registrationId: device },
   };
 
   try {
@@ -147,7 +102,7 @@ async function getDeviceHub(context, device) {
     }
 
     const statusOptions = {
-      url: `https://${registrationHost}/${context.idScope}/registrations/${deviceId}/operations/${response.operationId}?api-version=${registrationApiVersion}`,
+      url: `https://${registrationHost}/${context.idScope}/registrations/${device}/operations/${response.operationId}?api-version=${registrationApiVersion}`,
       method: "GET",
       json: true,
       headers: { Authorization: sasToken },
@@ -187,21 +142,19 @@ async function getDeviceHub(context, device) {
     );
   } catch (e) {
     throw new StatusError(
-      `Unable to register device ${deviceId}: ${e.message}`,
+      `Unable to register device ${device}: ${e.message}`,
       e.statusCode
     );
   }
 }
 
-async function getRegistrationSasToken(context, deviceId) {
-  const uri = encodeURIComponent(
-    `${context.idScope}/registrations/${deviceId}`
-  );
+async function getRegistrationSasToken(context, device) {
+  const uri = encodeURIComponent(`${context.idScope}/registrations/${device}`);
   const ttl = Math.round(Date.now() / 1000) + registrationSasTtl;
   const signature = crypto
     .createHmac(
       "sha256",
-      new Buffer(await getDeviceKey(context, deviceId), "base64")
+      new Buffer(await getDeviceKey(context, device), "base64")
     )
     .update(`${uri}\n${ttl}`)
     .digest("base64");
@@ -213,23 +166,19 @@ async function getRegistrationSasToken(context, deviceId) {
 /**
  * Computes a derived device key using the primary key.
  */
-async function getDeviceKey(context, deviceId) {
-  if (deviceCache[deviceId] && deviceCache[deviceId].deviceKey) {
-    return deviceCache[deviceId].deviceKey;
+async function getDeviceKey(context, device) {
+  if (deviceCache[device] && deviceCache[device].deviceKey) {
+    return deviceCache[device].deviceKey;
   }
 
+  const creds = await context.getCredentials();
+  const secret = await context.getSecret(creds);
   const key = crypto
-    .createHmac(
-      "SHA256",
-      Buffer.from(
-        await context.getSecret(context, context.primaryKeyUrl),
-        "base64"
-      )
-    )
-    .update(deviceId)
+    .createHmac("SHA256", Buffer.from(secret.value, "base64"))
+    .update(device)
     .digest()
     .toString("base64");
 
-  deviceCache[deviceId].deviceKey = key;
+  deviceCache[device].deviceKey = key;
   return key;
 }

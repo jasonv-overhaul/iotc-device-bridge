@@ -1,0 +1,614 @@
+{
+  "$schema": "http://json-schema.org/draft-04/schema#",
+  "type": "object",
+  "properties": {
+    "msgId": {
+      "type": "string"
+    },
+    "data": {
+      "type": "object",
+      "properties": {
+        "time": {
+          "type": "string"
+        },
+        "gatewayId": {
+          "type": "string"
+        },
+        "status": {
+          "type": "string"
+        },
+        "messageToken": {
+          "type": "string"
+        },
+        "isEncrypted": {
+          "type": "string"
+        },
+        "payload": {
+          "type": "array",
+          "items": [
+            {
+              "type": "object",
+              "properties": {
+                "tagId": {
+                  "type": "string"
+                },
+                "tagHandle": {
+                  "type": "object",
+                  "properties": {
+                    "shipmentId": {
+                      "type": "integer"
+                    },
+                    "packageId": {
+                      "type": "string"
+                    },
+                    "referenceId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["shipmentId", "packageId", "referenceId"]
+                },
+                "time": {
+                  "type": "string"
+                },
+                "sensorData": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyMinValue": {
+                          "type": "string"
+                        },
+                        "anomalyMaxValue": {
+                          "type": "string"
+                        },
+                        "anomalyCount": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyMinValue",
+                        "anomalyMaxValue",
+                        "anomalyCount"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "boolean"
+                        },
+                        "isAnomaly": {
+                          "type": "boolean"
+                        },
+                        "power": {
+                          "type": "integer"
+                        },
+                        "MicroInterval": {
+                          "type": "integer"
+                        },
+                        "MacroInterval": {
+                          "type": "integer"
+                        },
+                        "shipmentId": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "power",
+                        "MicroInterval",
+                        "MacroInterval",
+                        "shipmentId"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": ["tagId", "tagHandle", "time", "sensorData"]
+            },
+            {
+              "type": "object",
+              "properties": {
+                "tagId": {
+                  "type": "string"
+                },
+                "tagHandle": {
+                  "type": "object",
+                  "properties": {
+                    "shipmentId": {
+                      "type": "integer"
+                    },
+                    "packageId": {
+                      "type": "string"
+                    },
+                    "referenceId": {
+                      "type": "string"
+                    }
+                  },
+                  "required": ["shipmentId", "packageId", "referenceId"]
+                },
+                "time": {
+                  "type": "string"
+                },
+                "sensorData": {
+                  "type": "array",
+                  "items": [
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyMinValue": {
+                          "type": "string"
+                        },
+                        "anomalyMaxValue": {
+                          "type": "string"
+                        },
+                        "anomalyCount": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyMinValue",
+                        "anomalyMaxValue",
+                        "anomalyCount"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "boolean"
+                        },
+                        "isAnomaly": {
+                          "type": "boolean"
+                        },
+                        "power": {
+                          "type": "integer"
+                        },
+                        "MicroInterval": {
+                          "type": "integer"
+                        },
+                        "MacroInterval": {
+                          "type": "integer"
+                        },
+                        "shipmentId": {
+                          "type": "integer"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "power",
+                        "MicroInterval",
+                        "MacroInterval",
+                        "shipmentId"
+                      ]
+                    },
+                    {
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "type": "string"
+                        },
+                        "isAnalysis": {
+                          "type": "string"
+                        },
+                        "isAnomaly": {
+                          "type": "string"
+                        },
+                        "currentValue": {
+                          "type": "string"
+                        },
+                        "anomalyValue": {
+                          "type": "string"
+                        }
+                      },
+                      "required": [
+                        "type",
+                        "isAnalysis",
+                        "isAnomaly",
+                        "currentValue",
+                        "anomalyValue"
+                      ]
+                    }
+                  ]
+                }
+              },
+              "required": ["tagId", "tagHandle", "time", "sensorData"]
+            }
+          ]
+        },
+        "location": {
+          "type": "object",
+          "properties": {
+            "latitude": {
+              "type": "string"
+            },
+            "longitude": {
+              "type": "string"
+            },
+            "altitude": {
+              "type": "string"
+            },
+            "positionUncertainty": {
+              "type": "string"
+            },
+            "locationMethod": {
+              "type": "string"
+            },
+            "timeOfPosition": {
+              "type": "string"
+            },
+            "cellTowers": {
+              "type": "array",
+              "items": [
+                {
+                  "type": "object",
+                  "properties": {
+                    "cellId": {
+                      "type": "integer"
+                    },
+                    "locationAreaCode": {
+                      "type": "integer"
+                    },
+                    "mobileCountryCode": {
+                      "type": "integer"
+                    },
+                    "mobileNetworkCode": {
+                      "type": "integer"
+                    },
+                    "signalStrength": {
+                      "type": "integer"
+                    }
+                  },
+                  "required": [
+                    "cellId",
+                    "locationAreaCode",
+                    "mobileCountryCode",
+                    "mobileNetworkCode",
+                    "signalStrength"
+                  ]
+                }
+              ]
+            },
+            "wifiAccessPoints": {
+              "type": "array",
+              "items": {}
+            }
+          },
+          "required": [
+            "latitude",
+            "longitude",
+            "altitude",
+            "positionUncertainty",
+            "locationMethod",
+            "timeOfPosition",
+            "cellTowers",
+            "wifiAccessPoints"
+          ]
+        }
+      },
+      "required": [
+        "time",
+        "gatewayId",
+        "status",
+        "messageToken",
+        "isEncrypted",
+        "payload",
+        "location"
+      ]
+    }
+  },
+  "required": ["msgId", "data"]
+}

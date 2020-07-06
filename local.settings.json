@@ -1,7 +1,15 @@
 {
   "IsEncrypted": false,
   "Values": {
+    "AZURE_CLIENT_ID": "856b25a1-424f-42c3-956c-825428da48d3",
+    "AZURE_CLIENT_SECRET": "3BCiNfX02rqwe2n.-t-e2e2~9kN5jmdWvT",
+    "AZURE_TENANT_ID": "27b0fc81-df65-4555-b604-dee5f8942619",
     "AzureWebJobsStorage": "",
-    "FUNCTIONS_WORKER_RUNTIME": "node"
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+    "ID_SCOPE": "0ne001234B3",
+    "IOTC_KEY_URL": "http://localhost:7071/api/IoTCIntegrations",
+    "KEY_VAULT_URL": "https://iotcvltkzgbd7rdwgsvm.vault.azure.net/",
+    "SECRET_NAME": "iotckey",
+    "SECRET_VERSION": "9e0261c4b855473abd51dd184bc34b6c"
   }
 }

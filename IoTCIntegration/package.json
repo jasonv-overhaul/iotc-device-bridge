@@ -5,6 +5,8 @@
   "description": "Simple Azure Function for OH",
   "main": "index.js",
   "dependencies": {
+    "@azure/identity": "^1.0.3",
+    "@azure/keyvault-secrets": "^4.0.4",
     "azure-iot-device": "^1.7.4",
     "azure-iot-device-http": "^1.7.4",
     "request": "^2.88.0",
